@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Include="Persistence\CakeRepository.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.App" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="wwwroot\img\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="Persistence\DbInitializer.cs" />
+	</ItemGroup>
+
+	<Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist\main.js') ">
+		<Exec Command="node --version" ContinueOnError="true">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+		</Exec>
+		<Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. Please install from https://nodejs.org/ and restart your IDE." />
+
+		<Message Importance="high" Text="Running Webpack build..." />
+		<Exec Command="npm install" Condition="!Exists('node_modules')" />
+		<Exec Command="npx webpack --config webpack.config.js" />
+	</Target>
+
+	<Target Name="BuildClientAssets" BeforeTargets="Publish">
+		<Exec Command="npm install" Condition="!Exists('node_modules')" />
+		<Exec Command="npm run build:prod" />
+	</Target>
+
+</Project>
